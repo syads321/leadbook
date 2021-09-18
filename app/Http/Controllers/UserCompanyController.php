@@ -16,6 +16,11 @@ class UserCompanyController extends Controller
     public function getCompany(Request $request, $query)
     {
         $companies = $this->findCompany($query);
+        if (count($companies) === 0) {
+            throw new AuthenticationException(
+                "Company not found"
+            );
+        }
         return response()->json($companies);
     }
 
@@ -73,13 +78,13 @@ class UserCompanyController extends Controller
             ->get();
     }
 
-    public function deleteCompany(Request $request)
+    public function deleteMyCompany(Request $request)
     {
         $companyid = $request->input("company_id");
         $count = FavoriteCompany::where('company_id', $companyid)->count();
         if ($count > 0) {
             $company = FavoriteCompany::where('company_id', $companyid)->get();
-            if ($company->user_id !== $request->user()->id) {
+            if ($company[0]->user_id !== $request->user()->id) {
                 throw new AuthenticationException(
                     'Unauthenticated'
                 );

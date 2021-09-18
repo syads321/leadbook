@@ -1992,6 +1992,36 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     item: {
@@ -2024,6 +2054,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _mixins_debounce_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../mixins/debounce.js */ "./resources/js/mixins/debounce.js");
+/* harmony import */ var _CompanyItem_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CompanyItem.vue */ "./resources/js/components/CompanyItem.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2064,28 +2096,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    CompanyItem: _CompanyItem_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
   data: function data() {
     return {
       search: "",
-      companies: [],
-      mycompanies: []
+      companies: []
     };
   },
   watch: {
-    search: function search(val) {
-      if (val.length > 0) {
+    search: Object(_mixins_debounce_js__WEBPACK_IMPORTED_MODULE_1__["default"])(function (val) {
+      if (val !== "") {
         this.fetchCompanies(val);
       } else {
         this.companies = [];
       }
-    }
+    }, 200)
   },
   methods: {
     fetchCompanies: function fetchCompanies(val) {
@@ -2103,22 +2133,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
                 companies = _context.sent;
-                _this.companies = companies.data;
-                _context.next = 10;
+
+                _this.$store.commit("setErrors", "");
+
+                _this.companies = companies.data || [];
+                _context.next = 11;
                 break;
 
-              case 7:
-                _context.prev = 7;
+              case 8:
+                _context.prev = 8;
                 _context.t0 = _context["catch"](0);
 
                 _this.$store.commit("setErrors", _context.t0.response.data.message || "Not Found");
 
-              case 10:
+              case 11:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 7]]);
+        }, _callee, null, [[0, 8]]);
       }))();
     },
     addToMyCompany: function addToMyCompany(company) {
@@ -2442,8 +2475,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {
     isLoggedIn: function isLoggedIn() {
@@ -2523,6 +2554,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2530,7 +2570,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
-      companies: []
+      companies: [],
+      loading: true
     };
   },
   mounted: function mounted() {
@@ -2546,28 +2587,77 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.prev = 0;
-                _context.next = 3;
+                _this.loading = true;
+                _context.prev = 1;
+                _context.next = 4;
                 return _this.axios.get("/api/getmycompany");
 
-              case 3:
+              case 4:
                 companies = _context.sent;
                 _this.companies = companies.data;
-                _context.next = 10;
+                _context.next = 11;
                 break;
 
-              case 7:
-                _context.prev = 7;
-                _context.t0 = _context["catch"](0);
+              case 8:
+                _context.prev = 8;
+                _context.t0 = _context["catch"](1);
 
                 _this.$store.commit("setErrors", _context.t0.response.data.message || "Not Found");
 
-              case 10:
+              case 11:
+                _context.prev = 11;
+                _this.loading = false;
+                return _context.finish(11);
+
+              case 14:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 7]]);
+        }, _callee, null, [[1, 8, 11, 14]]);
+      }))();
+    },
+    deleteMyCompany: function deleteMyCompany(item) {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var data;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                data = {
+                  company_id: item.id
+                };
+                _context2.next = 4;
+                return _this2.axios["delete"]("/api/deletemycompany", {
+                  data: data
+                });
+
+              case 4:
+                _this2.fetchMyCompanies();
+
+                _context2.next = 10;
+                break;
+
+              case 7:
+                _context2.prev = 7;
+                _context2.t0 = _context2["catch"](0);
+
+                _this2.$store.commit("setErrors", _context2.t0.response.data.message || "Not Found");
+
+              case 10:
+                _context2.prev = 10;
+                _this2.loading = false;
+                return _context2.finish(10);
+
+              case 13:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[0, 7, 10, 13]]);
       }))();
     }
   }
@@ -2872,6 +2962,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_LoginForm_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../components/LoginForm.vue */ "./resources/js/components/LoginForm.vue");
 /* harmony import */ var _components_MyCompany_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../components/MyCompany.vue */ "./resources/js/components/MyCompany.vue");
 /* harmony import */ var _mixins_fetchuser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../mixins/fetchuser */ "./resources/js/mixins/fetchuser.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -42276,7 +42379,7 @@ var render = function() {
         ? _c(
             "button",
             {
-              staticClass: "btn btn-primary",
+              staticClass: "btn btn-outline-primary",
               attrs: { type: "button" },
               on: {
                 click: function($event) {
@@ -42284,7 +42387,37 @@ var render = function() {
                 }
               }
             },
-            [_vm._v("\n            Add To My Company List\n        ")]
+            [
+              _c(
+                "svg",
+                {
+                  staticClass: "bi bi-journals",
+                  attrs: {
+                    xmlns: "http://www.w3.org/2000/svg",
+                    width: "16",
+                    height: "16",
+                    fill: "currentColor",
+                    viewBox: "0 0 16 16"
+                  }
+                },
+                [
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2z"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0z"
+                    }
+                  })
+                ]
+              ),
+              _vm._v("\n            Add Company\n        ")
+            ]
           )
         : _vm._e(),
       _vm._v(" "),
@@ -42292,15 +42425,45 @@ var render = function() {
         ? _c(
             "button",
             {
-              staticClass: "btn btn-primary",
+              staticClass: "btn btn-outline-danger",
               attrs: { type: "button" },
               on: {
                 click: function($event) {
-                  return _vm.$emit("addButton")
+                  return _vm.$emit("removeButton")
                 }
               }
             },
-            [_vm._v("\n            Remove from My Company List\n        ")]
+            [
+              _c(
+                "svg",
+                {
+                  staticClass: "bi bi-journals",
+                  attrs: {
+                    xmlns: "http://www.w3.org/2000/svg",
+                    width: "16",
+                    height: "16",
+                    fill: "currentColor",
+                    viewBox: "0 0 16 16"
+                  }
+                },
+                [
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2z"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0z"
+                    }
+                  })
+                ]
+              ),
+              _vm._v("\n            Remove Company\n        ")
+            ]
           )
         : _vm._e()
     ])
@@ -42328,8 +42491,8 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "card" }, [
-    _c("div", { staticClass: "card" }, [
+  return _c("div", [
+    _c("div", { staticClass: "row" }, [
       _c("input", {
         directives: [
           {
@@ -42339,12 +42502,12 @@ var render = function() {
             expression: "search"
           }
         ],
-        staticClass: "form-control ds-input",
+        staticClass: "form-control ds-input form-control-lg",
         staticStyle: { position: "relative", "vertical-align": "top" },
         attrs: {
           type: "search",
           id: "search-input",
-          placeholder: "Search...",
+          placeholder: "Type keyword...",
           "aria-label": "Search for...",
           autocomplete: "off",
           spellcheck: "false",
@@ -42363,49 +42526,26 @@ var render = function() {
             _vm.search = $event.target.value
           }
         }
+      })
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "row" },
+      _vm._l(_vm.companies, function(item, i) {
+        return _c("company-item", {
+          key: i,
+          staticClass: "col-lg-4 col-md-6 col-xs-12 mr-2 mb-2 mt-2",
+          attrs: { item: item, addButton: true, removeButton: false },
+          on: {
+            addButton: function($event) {
+              return _vm.addToMyCompany(item)
+            }
+          }
+        })
       }),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "card", staticStyle: { width: "18rem" } },
-        _vm._l(_vm.companies, function(item, i) {
-          return _c("div", { key: i, staticClass: "card" }, [
-            _c("div", { staticClass: "card-body" }, [
-              _c("h5", { staticClass: "card-title" }, [
-                _vm._v(_vm._s(item.company_name))
-              ]),
-              _vm._v(" "),
-              _c("h6", { staticClass: "card-subtitle mb-2 text-muted" }, [
-                _vm._v(
-                  "\n                        " +
-                    _vm._s(item.address) +
-                    "\n                    "
-                )
-              ]),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary",
-                  attrs: { type: "button" },
-                  on: {
-                    click: function($event) {
-                      return _vm.addToMyCompany(item)
-                    }
-                  }
-                },
-                [
-                  _vm._v(
-                    "\n                        Add To My Company List\n                    "
-                  )
-                ]
-              )
-            ])
-          ])
-        }),
-        0
-      )
-    ])
+      1
+    )
   ])
 }
 var staticRenderFns = []
@@ -42755,137 +42895,147 @@ var render = function() {
     "nav",
     { staticClass: "navbar navbar-expand-md navbar-light bg-white shadow-sm" },
     [
-      _c("div", { staticClass: "container" }, [
-        _c("a", { staticClass: "navbar-brand", attrs: { href: "#" } }, [
-          _vm._v("\n            Laravel\n        ")
-        ]),
-        _vm._v(" "),
-        _vm._m(0),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "collapse navbar-collapse",
-            attrs: { id: "navbarSupportedContent" }
-          },
-          [
-            _c("ul", { staticClass: "navbar-nav mr-auto" }),
-            _vm._v(" "),
-            _c("ul", { staticClass: "navbar-nav ml-auto" }, [
-              !_vm.isLoggedIn
-                ? _c(
-                    "li",
-                    { staticClass: "nav-item" },
-                    [
-                      _c(
-                        "router-link",
-                        { staticClass: "nav-link", attrs: { to: "/" } },
-                        [_vm._v("Login")]
-                      )
-                    ],
-                    1
-                  )
-                : _vm._e(),
+      _c(
+        "div",
+        { staticClass: "container" },
+        [
+          _c(
+            "router-link",
+            { staticClass: "navbar-brand", attrs: { to: "/" } },
+            [_vm._v("My Company")]
+          ),
+          _vm._v(" "),
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "collapse navbar-collapse",
+              attrs: { id: "navbarSupportedContent" }
+            },
+            [
+              _c("ul", { staticClass: "navbar-nav mr-auto" }),
               _vm._v(" "),
-              _vm.isLoggedIn
-                ? _c(
-                    "li",
-                    { staticClass: "nav-item" },
-                    [
-                      _c(
-                        "router-link",
-                        { staticClass: "nav-link", attrs: { to: "/" } },
-                        [_vm._v("My Company")]
-                      )
-                    ],
-                    1
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              !_vm.isLoggedIn
-                ? _c(
-                    "li",
-                    { staticClass: "nav-item" },
-                    [
-                      _c(
-                        "router-link",
-                        { staticClass: "nav-link", attrs: { to: "/register" } },
-                        [_vm._v("Register")]
-                      )
-                    ],
-                    1
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.isLoggedIn
-                ? _c(
-                    "li",
-                    { staticClass: "nav-item" },
-                    [
-                      _c(
-                        "router-link",
-                        {
-                          staticClass: "nav-link",
-                          attrs: { to: "/findcompany" }
-                        },
-                        [_vm._v("Find Company")]
-                      )
-                    ],
-                    1
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.isLoggedIn
-                ? _c("li", { staticClass: "nav-item dropdown" }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "nav-link dropdown-toggle",
-                        attrs: {
-                          id: "navbarDropdown",
-                          href: "#",
-                          role: "button",
-                          "data-toggle": "dropdown",
-                          "aria-haspopup": "true",
-                          "aria-expanded": "false"
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n                        " +
-                            _vm._s(_vm.name) +
-                            "\n                    "
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass: "dropdown-menu dropdown-menu-right",
-                        attrs: { "aria-labelledby": "navbarDropdown" }
-                      },
+              _c("ul", { staticClass: "navbar-nav ml-auto" }, [
+                !_vm.isLoggedIn
+                  ? _c(
+                      "li",
+                      { staticClass: "nav-item" },
                       [
                         _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            on: { click: _vm.logOut }
-                          },
-                          [
-                            _vm._v(
-                              "\n                            Log Out\n                        "
-                            )
-                          ]
+                          "router-link",
+                          { staticClass: "nav-link", attrs: { to: "/" } },
+                          [_vm._v("Login")]
                         )
-                      ]
+                      ],
+                      1
                     )
-                  ])
-                : _vm._e()
-            ])
-          ]
-        )
-      ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.isLoggedIn
+                  ? _c(
+                      "li",
+                      { staticClass: "nav-item" },
+                      [
+                        _c(
+                          "router-link",
+                          { staticClass: "nav-link", attrs: { to: "/" } },
+                          [_vm._v("My Company")]
+                        )
+                      ],
+                      1
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                !_vm.isLoggedIn
+                  ? _c(
+                      "li",
+                      { staticClass: "nav-item" },
+                      [
+                        _c(
+                          "router-link",
+                          {
+                            staticClass: "nav-link",
+                            attrs: { to: "/register" }
+                          },
+                          [_vm._v("Register")]
+                        )
+                      ],
+                      1
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.isLoggedIn
+                  ? _c(
+                      "li",
+                      { staticClass: "nav-item" },
+                      [
+                        _c(
+                          "router-link",
+                          {
+                            staticClass: "nav-link",
+                            attrs: { to: "/findcompany" }
+                          },
+                          [_vm._v("Find Company")]
+                        )
+                      ],
+                      1
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.isLoggedIn
+                  ? _c("li", { staticClass: "nav-item dropdown" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "nav-link dropdown-toggle",
+                          attrs: {
+                            id: "navbarDropdown",
+                            href: "#",
+                            role: "button",
+                            "data-toggle": "dropdown",
+                            "aria-haspopup": "true",
+                            "aria-expanded": "false"
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        " +
+                              _vm._s(_vm.name) +
+                              "\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "dropdown-menu dropdown-menu-right",
+                          attrs: { "aria-labelledby": "navbarDropdown" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "dropdown-item",
+                              on: { click: _vm.logOut }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Log Out\n                        "
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ])
+                  : _vm._e()
+              ])
+            ]
+          )
+        ],
+        1
+      )
     ]
   )
 }
@@ -42931,21 +43081,33 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "card" }, [
-    _c("div", { staticClass: "card" }, [
-      _c(
-        "div",
-        { staticClass: "card", staticStyle: { width: "18rem" } },
-        _vm._l(_vm.companies, function(item, i) {
-          return _c("company-item", {
-            key: i,
-            attrs: { item: item, addButton: false, removeButton: true }
-          })
-        }),
-        1
-      )
-    ])
-  ])
+  return _c(
+    "div",
+    { staticClass: "row" },
+    [
+      _c("div", { staticClass: "col-12" }, [
+        _vm.companies.length === 0 && !_vm.loading
+          ? _c("h4", [
+              _vm._v("\n            You do not have any company\n        ")
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _vm._l(_vm.companies, function(item, i) {
+        return _c("company-item", {
+          key: i,
+          staticClass: "col-lg-4 col-md-6 col-xs-12 ml-2 mb-2",
+          attrs: { item: item, addButton: false, removeButton: true },
+          on: {
+            removeButton: function($event) {
+              return _vm.deleteMyCompany(item)
+            }
+          }
+        })
+      })
+    ],
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -43439,12 +43601,48 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _vm.isLoggedIn
-        ? _c("div", { staticClass: "col-md-8" }, [_c("my-company")], 1)
+        ? _c(
+            "div",
+            { staticClass: "col-md-8" },
+            [
+              _c("div", { staticClass: "row mb-3" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "col-lg-4 text-right" },
+                  [
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "btn btn-primary btn-lg",
+                        attrs: { to: "/findcompany" }
+                      },
+                      [_vm._v("Add Company")]
+                    )
+                  ],
+                  1
+                )
+              ]),
+              _vm._v(" "),
+              _c("my-company")
+            ],
+            1
+          )
         : _vm._e()
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-lg-8" }, [
+      _c("h2", { staticClass: "center" }, [_vm._v("My Company")])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -60740,6 +60938,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RegisterForm_vue_vue_type_template_id_7942be72___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/mixins/debounce.js":
+/*!*****************************************!*\
+  !*** ./resources/js/mixins/debounce.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return debounce; });
+function debounce(fn, delay) {
+  var timeoutID = null;
+  return function () {
+    clearTimeout(timeoutID);
+    var args = arguments;
+    var that = this;
+    timeoutID = setTimeout(function () {
+      fn.apply(that, args);
+    }, delay);
+  };
+}
 
 /***/ }),
 

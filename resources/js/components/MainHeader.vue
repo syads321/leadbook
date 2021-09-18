@@ -1,9 +1,7 @@
 <template>
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                Laravel
-            </a>
+            <router-link class="navbar-brand" to="/">My Company</router-link>
             <button
                 class="navbar-toggler"
                 type="button"

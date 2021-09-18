@@ -21,6 +21,10 @@ Route::get('/home', function () {
     return view('home');
 });
 
+Route::get('/findcompany', function () {
+    return view('spa');
+});
+
 // Route::get('/user', function (Request $request) {
 //     dd(Auth::user()->name);
 // });

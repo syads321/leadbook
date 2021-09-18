@@ -1,11 +1,11 @@
 <template>
-    <div class="card">
-        <div class="card">
+    <div>
+        <div class="row">
             <input
                 type="search"
-                class="form-control ds-input"
+                class="form-control ds-input form-control-lg"
                 id="search-input"
-                placeholder="Search..."
+                placeholder="Type keyword..."
                 aria-label="Search for..."
                 autocomplete="off"
                 spellcheck="false"
@@ -17,50 +17,52 @@
                 style="position: relative; vertical-align: top;"
                 v-model="search"
             />
-            <div class="card" style="width: 18rem;">
-                <div class="card" v-for="(item, i) in companies" :key="i">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ item.company_name }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            {{ item.address }}
-                        </h6>
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                            @click="addToMyCompany(item)"
-                        >
-                            Add To My Company List
-                        </button>
-                    </div>
-                </div>
-            </div>
+        </div>
+        <div class="row">
+            <company-item
+                v-for="(item, i) in companies"
+                :key="i"
+                :item="item"
+                :addButton="true"
+                :removeButton="false"
+                class="col-lg-4 col-md-6 col-xs-12 mr-2 mb-2 mt-2"
+                @addButton="addToMyCompany(item)"
+            ></company-item>
         </div>
     </div>
 </template>
 
 <script>
+import debounce from "./../mixins/debounce.js";
+import CompanyItem from "./CompanyItem.vue";
 export default {
+    components: {
+        CompanyItem
+    },
     data() {
         return {
             search: "",
             companies: [],
-            mycompanies: []
         };
     },
     watch: {
-        search(val) {
-            if (val.length > 0) {
+        search: debounce(function(val) {
+            if (val !== "") {
                 this.fetchCompanies(val);
             } else {
                 this.companies = [];
             }
-        }
+        }, 200)
     },
     methods: {
         async fetchCompanies(val) {
             try {
                 const companies = await this.axios.get("/api/companies/" + val);
-                this.companies = companies.data;
+                 this.$store.commit(
+                    "setErrors",
+                    ""
+                );
+                this.companies = companies.data || [];
             } catch (e) {
                 this.$store.commit(
                     "setErrors",

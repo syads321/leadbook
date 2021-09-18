@@ -21,3 +21,5 @@ Route::middleware('user_accessible')->get('/user', function (Request $request) {
 Route::middleware('user_accessible')->get('/companies/{query}', 'UserCompanyController@getCompany');
 Route::middleware('user_accessible')->post('/addmycompany', 'UserCompanyController@addMyCompany');
 Route::middleware('user_accessible')->get('/getmycompany', 'UserCompanyController@getMyCompany');
+Route::middleware('user_accessible')->delete('/deletemycompany', 'UserCompanyController@deleteMyCompany');
+
