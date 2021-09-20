@@ -153,6 +153,42 @@
                             </div>
                         </div>
                     </validation-provider>
+                     <validation-provider
+                        name="Phonenumber"
+                        rules="required|"
+                        v-slot="{ errors }"
+                    >
+                        <div class="form-group row">
+                            <label
+                                for="password"
+                                class="col-md-4 col-form-label text-md-right"
+                                >Phone Number</label
+                            >
+
+                            <div class="col-md-6">
+                                <input
+                                    id="phonenumber"
+                                    type="text"
+                                    class="form-control"
+                                    name="phonenumber"
+                                    v-model="form.phonenumber"
+                                    ref="phonenumber"
+                                    required
+                                    autocomplete="new-password"
+                                    :class="{ 'is-invalid': errors.length > 0 }"
+                                />
+                                <template v-for="(message, key) in errors">
+                                    <span
+                                        class="invalid-feedback"
+                                        :key="key"
+                                        role="alert"
+                                    >
+                                        {{ message }}
+                                    </span>
+                                </template>
+                            </div>
+                        </div>
+                    </validation-provider>
                     <div class="form-group row mb-0">
                         <div class="col-md-6 offset-md-4">
                             <button type="submit" class="btn btn-primary">

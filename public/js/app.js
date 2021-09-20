@@ -2940,6 +2940,42 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -43603,6 +43639,92 @@ var render = function() {
                                     _vm.$set(
                                       _vm.form,
                                       "password_confirmation",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _vm._l(errors, function(message, key) {
+                                return [
+                                  _c(
+                                    "span",
+                                    {
+                                      key: key,
+                                      staticClass: "invalid-feedback",
+                                      attrs: { role: "alert" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                    " +
+                                          _vm._s(message) +
+                                          "\n                                "
+                                      )
+                                    ]
+                                  )
+                                ]
+                              })
+                            ],
+                            2
+                          )
+                        ])
+                      ]
+                    }
+                  }
+                ])
+              }),
+              _vm._v(" "),
+              _c("validation-provider", {
+                attrs: { name: "Phonenumber", rules: "required|" },
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function(ref) {
+                      var errors = ref.errors
+                      return [
+                        _c("div", { staticClass: "form-group row" }, [
+                          _c(
+                            "label",
+                            {
+                              staticClass:
+                                "col-md-4 col-form-label text-md-right",
+                              attrs: { for: "password" }
+                            },
+                            [_vm._v("Phone Number")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "col-md-6" },
+                            [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.form.phonenumber,
+                                    expression: "form.phonenumber"
+                                  }
+                                ],
+                                ref: "phonenumber",
+                                staticClass: "form-control",
+                                class: { "is-invalid": errors.length > 0 },
+                                attrs: {
+                                  id: "phonenumber",
+                                  type: "text",
+                                  name: "phonenumber",
+                                  required: "",
+                                  autocomplete: "new-password"
+                                },
+                                domProps: { value: _vm.form.phonenumber },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.form,
+                                      "phonenumber",
                                       $event.target.value
                                     )
                                   }
