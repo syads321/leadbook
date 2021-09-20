@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Get users profile if authenticated
 Route::middleware('user_accessible')->get('/user', function (Request $request) {
     return response()->json($request->user());
 });

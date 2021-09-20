@@ -9,7 +9,7 @@ use Illuminate\Auth\AuthenticationException;
 class UserAccessible
 {
     /**
-     * Handle an incoming request.
+     * Check user authentication.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
