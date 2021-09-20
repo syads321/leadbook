@@ -190,13 +190,18 @@ export default {
     methods: {
         async onSubmit() {
             const valid = await this.$refs.observer.validate();
-            if (!valid) return
+            if (!valid) return;
             try {
+                this.$store.commit(
+                    "setProcess",
+                    "Registering user please wait"
+                );
                 await this.axios.post("/register", this.form);
-            } catch(e) {
-                console.log(e)
-                this.$store.commit('setErrors', e.message)
-            } 
+                this.$store.commit("setProcess", "");
+                this.$emit("onSuccess");
+            } catch (e) {
+                this.$store.commit("setErrors", e.message);
+            }
         }
     }
 };

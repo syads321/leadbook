@@ -36,6 +36,18 @@ class UserCompanyController extends Controller
     }
 
     /**
+     * Query get all company from database.
+     * @return Array
+     */
+    public function findAllCompany(Request $request)
+    {
+        $this->take = $request->query("take") === null ? 10 : (int)$request->query("take") ;
+        $this->skip = $request->query("skip") === null ? 0 : (int)$request->query("skip") ;
+        return Company::skip($this->skip)->take($this->take)->get();
+    }
+
+
+    /**
      * Add company to company list.
      * Route : /addmycompany (POST)
      * { id : {companyid}}

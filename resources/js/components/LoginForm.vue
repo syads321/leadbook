@@ -91,6 +91,7 @@
                                     v-model="form.remember"
                                 />
                                 <label class="form-check-label" for="remember">
+                                    Remember Me
                                 </label>
                             </div>
                         </div>
@@ -139,10 +140,21 @@ export default {
             const valid = await this.$refs.observer.validate();
             console.log(valid);
             try {
+                this.$store.commit("setProcess", "Logging in please wait");
                 const user = await this.axios.post("/login", this.form);
-                this.$emit('onSuccess')
+                this.$store.commit("setProcess", "");
+                this.$emit("onSuccess");
             } catch (e) {
-                this.$store.commit("setErrors", e.response.data.message);
+                let message = e.response.data.message;
+                if (message === "The given data was invalid.") {
+                    message = "";
+                    for (var a in e.response.data.errors) {
+                        message = message + a + ": </br>";
+                        message = message + e.response.data.errors[a];
+                    }
+                }
+                this.$store.commit("setProcess", "");
+                this.$store.commit("setErrors", message);
             }
         }
     }

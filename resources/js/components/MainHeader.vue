@@ -67,7 +67,9 @@
 </template>
 
 <script>
+import fetchuser from "./../mixins/fetchuser";
 export default {
+    mixins: [fetchuser],
     computed: {
         isLoggedIn() {
             return this.$store.state.islogin;
@@ -78,9 +80,9 @@ export default {
     },
     methods: {
         async logOut() {
-            const valid = await this.$refs.observer.validate();
             try {
                 await this.axios.post("/logout", {});
+                window.location.reload(true);
             } catch (e) {
                 this.$store.commit("setErrors", e.response.data.message);
             }

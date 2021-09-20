@@ -1934,6 +1934,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1944,12 +1959,20 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     errors: function errors() {
       return this.$store.state.errors;
+    },
+    process: function process() {
+      return this.$store.state.process;
+    },
+    info: function info() {
+      return this.$store.state.info;
     }
+  },
+  mounted: function mounted() {
+    this.fetchUser();
   },
   watch: {
     $route: function $route() {
       this.$store.commit("setErrors", "");
-      this.fetchUser();
     }
   }
 });
@@ -2096,6 +2119,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2105,15 +2134,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       search: "",
-      companies: []
+      companies: [],
+      t: null
     };
+  },
+  mounted: function mounted() {
+    this.fetchAllCompanies();
   },
   watch: {
     search: Object(_mixins_debounce_js__WEBPACK_IMPORTED_MODULE_1__["default"])(function (val) {
       if (val !== "") {
         this.fetchCompanies(val);
       } else {
-        this.companies = [];
+        this.fetchAllCompanies();
       }
     }, 200)
   },
@@ -2154,38 +2187,77 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee, null, [[0, 8]]);
       }))();
     },
-    addToMyCompany: function addToMyCompany(company) {
+    fetchAllCompanies: function fetchAllCompanies() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var param;
+        var companies;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.prev = 0;
-                param = {
-                  id: company.id
-                };
-                _context2.next = 4;
-                return _this2.axios.post("/api/addmycompany", param);
+                _context2.next = 3;
+                return _this2.axios.get("/api/allcompanies/");
 
-              case 4:
-                _context2.next = 9;
+              case 3:
+                companies = _context2.sent;
+                _this2.companies = companies.data || [];
+                _context2.next = 10;
                 break;
 
-              case 6:
-                _context2.prev = 6;
+              case 7:
+                _context2.prev = 7;
                 _context2.t0 = _context2["catch"](0);
 
                 _this2.$store.commit("setErrors", _context2.t0.response.data.message || "Not Found");
 
-              case 9:
+              case 10:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 6]]);
+        }, _callee2, null, [[0, 7]]);
+      }))();
+    },
+    addToMyCompany: function addToMyCompany(company) {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var param;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.prev = 0;
+                param = {
+                  id: company.id
+                };
+                _context3.next = 4;
+                return _this3.axios.post("/api/addmycompany", param);
+
+              case 4:
+                _this3.$store.commit("setInfo", company.company_name + " has been added to your company list");
+
+                clearTimeout(_this3.t);
+                _this3.t = setTimeout(function () {
+                  _this3.$store.commit("setInfo", "");
+                }, 3000);
+                _context3.next = 12;
+                break;
+
+              case 9:
+                _context3.prev = 9;
+                _context3.t0 = _context3["catch"](0);
+
+                _this3.$store.commit("setErrors", _context3.t0.response.data || "Not Found");
+
+              case 12:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, null, [[0, 9]]);
       }))();
     }
   }
@@ -2326,6 +2398,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2348,7 +2421,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var valid, user;
+        var valid, user, message, a;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -2360,29 +2433,46 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 valid = _context.sent;
                 console.log(valid);
                 _context.prev = 4;
-                _context.next = 7;
+
+                _this.$store.commit("setProcess", "Logging in please wait");
+
+                _context.next = 8;
                 return _this.axios.post("/login", _this.form);
 
-              case 7:
+              case 8:
                 user = _context.sent;
 
-                _this.$emit('onSuccess');
+                _this.$store.commit("setProcess", "");
 
-                _context.next = 14;
+                _this.$emit("onSuccess");
+
+                _context.next = 19;
                 break;
 
-              case 11:
-                _context.prev = 11;
+              case 13:
+                _context.prev = 13;
                 _context.t0 = _context["catch"](4);
+                message = _context.t0.response.data.message;
 
-                _this.$store.commit("setErrors", _context.t0.response.data.message);
+                if (message === "The given data was invalid.") {
+                  message = "";
 
-              case 14:
+                  for (a in _context.t0.response.data.errors) {
+                    message = message + a + ": </br>";
+                    message = message + _context.t0.response.data.errors[a];
+                  }
+                }
+
+                _this.$store.commit("setProcess", "");
+
+                _this.$store.commit("setErrors", message);
+
+              case 19:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[4, 11]]);
+        }, _callee, null, [[4, 13]]);
       }))();
     }
   }
@@ -2401,6 +2491,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _mixins_fetchuser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../mixins/fetchuser */ "./resources/js/mixins/fetchuser.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2475,7 +2566,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_mixins_fetchuser__WEBPACK_IMPORTED_MODULE_1__["default"]],
   computed: {
     isLoggedIn: function isLoggedIn() {
       return this.$store.state.islogin;
@@ -2489,36 +2582,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var valid;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
-                return _this.$refs.observer.validate();
-
-              case 2:
-                valid = _context.sent;
-                _context.prev = 3;
-                _context.next = 6;
+                _context.prev = 0;
+                _context.next = 3;
                 return _this.axios.post("/logout", {});
 
-              case 6:
-                _context.next = 11;
+              case 3:
+                window.location.reload(true);
+                _context.next = 9;
                 break;
 
-              case 8:
-                _context.prev = 8;
-                _context.t0 = _context["catch"](3);
+              case 6:
+                _context.prev = 6;
+                _context.t0 = _context["catch"](0);
 
                 _this.$store.commit("setErrors", _context.t0.response.data.message);
 
-              case 11:
+              case 9:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[3, 8]]);
+        }, _callee, null, [[0, 6]]);
       }))();
     }
   }
@@ -2894,26 +2982,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 5:
                 _context.prev = 5;
-                _context.next = 8;
+
+                _this.$store.commit("setProcess", "Registering user please wait");
+
+                _context.next = 9;
                 return _this.axios.post("/register", _this.form);
 
-              case 8:
-                _context.next = 14;
+              case 9:
+                _this.$store.commit("setProcess", "");
+
+                _this.$emit("onSuccess");
+
+                _context.next = 16;
                 break;
 
-              case 10:
-                _context.prev = 10;
+              case 13:
+                _context.prev = 13;
                 _context.t0 = _context["catch"](5);
-                console.log(_context.t0);
 
-                _this.$store.commit('setErrors', _context.t0.message);
+                _this.$store.commit("setErrors", _context.t0.message);
 
-              case 14:
+              case 16:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[5, 10]]);
+        }, _callee, null, [[5, 13]]);
       }))();
     }
   }
@@ -3038,6 +3132,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     RegisterForm: _components_RegisterForm_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  methods: {
+    onSuccess: function onSuccess() {
+      this.$store.commit("setInfo", "Register succedd, please check you email");
+      this.$router.push('/');
+    }
   }
 });
 
@@ -42331,11 +42431,27 @@ var render = function() {
       _c("main-header"),
       _vm._v(" "),
       _vm.errors !== ""
-        ? _c(
-            "div",
-            { staticClass: "alert alert-danger", attrs: { role: "alert" } },
-            [_vm._v("\n        " + _vm._s(_vm.errors) + "\n    ")]
-          )
+        ? _c("div", {
+            staticClass: "alert alert-danger",
+            attrs: { role: "alert" },
+            domProps: { innerHTML: _vm._s(_vm.errors) }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.process !== ""
+        ? _c("div", {
+            staticClass: "alert alert-warning",
+            attrs: { role: "alert" },
+            domProps: { innerHTML: _vm._s(_vm.process) }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.info !== ""
+        ? _c("div", {
+            staticClass: "alert alert-info",
+            attrs: { role: "alert" },
+            domProps: { innerHTML: _vm._s(_vm.info) }
+          })
         : _vm._e(),
       _vm._v(" "),
       _c("main", { staticClass: "py-4" }, [_c("router-view")], 1)
@@ -42507,7 +42623,7 @@ var render = function() {
         attrs: {
           type: "search",
           id: "search-input",
-          placeholder: "Type keyword...",
+          placeholder: "Type keyword... eg: Microsoft",
           "aria-label": "Search for...",
           autocomplete: "off",
           spellcheck: "false",
@@ -42529,23 +42645,31 @@ var render = function() {
       })
     ]),
     _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "row" },
-      _vm._l(_vm.companies, function(item, i) {
-        return _c("company-item", {
-          key: i,
-          staticClass: "col-lg-4 col-md-6 col-xs-12 mr-2 mb-2 mt-2",
-          attrs: { item: item, addButton: true, removeButton: false },
-          on: {
-            addButton: function($event) {
-              return _vm.addToMyCompany(item)
-            }
-          }
-        })
-      }),
-      1
-    )
+    _c("div", { staticClass: "row" }, [
+      _c(
+        "div",
+        { staticClass: "row" },
+        _vm._l(_vm.companies, function(item, i) {
+          return _c(
+            "div",
+            { key: i, staticClass: "col-lg-4 col-md-6 col-xs-12" },
+            [
+              _c("company-item", {
+                staticClass: "mb-2 mt-2",
+                attrs: { item: item, addButton: true, removeButton: false },
+                on: {
+                  addButton: function($event) {
+                    return _vm.addToMyCompany(item)
+                  }
+                }
+              })
+            ],
+            1
+          )
+        }),
+        0
+      )
+    ])
   ])
 }
 var staticRenderFns = []
@@ -42818,10 +42942,18 @@ var render = function() {
                       }
                     }),
                     _vm._v(" "),
-                    _c("label", {
-                      staticClass: "form-check-label",
-                      attrs: { for: "remember" }
-                    })
+                    _c(
+                      "label",
+                      {
+                        staticClass: "form-check-label",
+                        attrs: { for: "remember" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                                Remember Me\n                            "
+                        )
+                      ]
+                    )
                   ])
                 ])
               ]),
@@ -43666,7 +43798,12 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-8" }, [_c("register-form")], 1)
+      _c(
+        "div",
+        { staticClass: "col-md-8" },
+        [_c("register-form", { on: { onSuccess: _vm.onSuccess } })],
+        1
+      )
     ])
   ])
 }
@@ -61254,6 +61391,10 @@ var routes = [{
   path: '/',
   component: _pages_Home_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
 }, {
+  name: 'home-redirect',
+  path: '/home',
+  component: _pages_Home_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+}, {
   name: 'register',
   path: '/register',
   component: _pages_Register_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -61283,12 +61424,20 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_0__
 var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
   state: {
     errors: '',
+    process: '',
     islogin: false,
-    user: {}
+    user: {},
+    info: ''
   },
   mutations: {
     setErrors: function setErrors(state, err) {
       state.errors = err;
+    },
+    setProcess: function setProcess(state, process) {
+      state.process = process;
+    },
+    setInfo: function setInfo(state, info) {
+      state.info = info;
     },
     setUser: function setUser(state, data) {
       state.islogin = true;

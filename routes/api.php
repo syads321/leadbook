@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('user_accessible')->get('/user', function (Request $request) {
     return response()->json($request->user());
 });
-
+Route::middleware('user_accessible')->get('/allcompanies', 'UserCompanyController@findAllCompany');
 Route::middleware('user_accessible')->get('/companies/{query}', 'UserCompanyController@getCompany');
 Route::middleware('user_accessible')->post('/addmycompany', 'UserCompanyController@addMyCompany');
 Route::middleware('user_accessible')->get('/getmycompany', 'UserCompanyController@getMyCompany');

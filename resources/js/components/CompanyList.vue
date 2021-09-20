@@ -5,7 +5,7 @@
                 type="search"
                 class="form-control ds-input form-control-lg"
                 id="search-input"
-                placeholder="Type keyword..."
+                placeholder="Type keyword... eg: Microsoft"
                 aria-label="Search for..."
                 autocomplete="off"
                 spellcheck="false"
@@ -19,15 +19,21 @@
             />
         </div>
         <div class="row">
-            <company-item
-                v-for="(item, i) in companies"
-                :key="i"
-                :item="item"
-                :addButton="true"
-                :removeButton="false"
-                class="col-lg-4 col-md-6 col-xs-12 mr-2 mb-2 mt-2"
-                @addButton="addToMyCompany(item)"
-            ></company-item>
+            <div class="row">
+                <div
+                    class="col-lg-4 col-md-6 col-xs-12"
+                    v-for="(item, i) in companies"
+                    :key="i"
+                >
+                    <company-item
+                        :item="item"
+                        :addButton="true"
+                        :removeButton="false"
+                        @addButton="addToMyCompany(item)"
+                        class="mb-2 mt-2"
+                    ></company-item>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -43,14 +49,18 @@ export default {
         return {
             search: "",
             companies: [],
+            t: null
         };
+    },
+    mounted() {
+        this.fetchAllCompanies();
     },
     watch: {
         search: debounce(function(val) {
             if (val !== "") {
                 this.fetchCompanies(val);
             } else {
-                this.companies = [];
+                this.fetchAllCompanies();
             }
         }, 200)
     },
@@ -58,10 +68,18 @@ export default {
         async fetchCompanies(val) {
             try {
                 const companies = await this.axios.get("/api/companies/" + val);
-                 this.$store.commit(
+                this.$store.commit("setErrors", "");
+                this.companies = companies.data || [];
+            } catch (e) {
+                this.$store.commit(
                     "setErrors",
-                    ""
+                    e.response.data.message || "Not Found"
                 );
+            }
+        },
+        async fetchAllCompanies() {
+            try {
+                const companies = await this.axios.get("/api/allcompanies/");
                 this.companies = companies.data || [];
             } catch (e) {
                 this.$store.commit(
@@ -76,11 +94,17 @@ export default {
                     id: company.id
                 };
                 await this.axios.post("/api/addmycompany", param);
-            } catch (e) {
                 this.$store.commit(
-                    "setErrors",
-                    e.response.data.message || "Not Found"
+                    "setInfo",
+                    company.company_name +
+                        " has been added to your company list"
                 );
+                clearTimeout(this.t);
+                this.t = setTimeout(() => {
+                    this.$store.commit("setInfo", "");
+                }, 3000);
+            } catch (e) {
+                this.$store.commit("setErrors", e.response.data || "Not Found");
             }
         }
     }

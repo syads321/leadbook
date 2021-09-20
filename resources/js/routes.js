@@ -9,6 +9,11 @@ export const routes = [
         component: Home
     },
     {
+        name: 'home-redirect',
+        path: '/home',
+        component: Home
+    },
+    {
         name: 'register',
         path: '/register',
         component: Register
