@@ -79,7 +79,7 @@ export default {
         },
         async fetchAllCompanies() {
             try {
-                const companies = await this.axios.get("/api/allcompanies/");
+                const companies = await this.axios.get("/api/allcompanies");
                 this.companies = companies.data || [];
             } catch (e) {
                 this.$store.commit(

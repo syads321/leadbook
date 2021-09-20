@@ -2198,7 +2198,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context2.prev = 0;
                 _context2.next = 3;
-                return _this2.axios.get("/api/allcompanies/");
+                return _this2.axios.get("/api/allcompanies");
 
               case 3:
                 companies = _context2.sent;
