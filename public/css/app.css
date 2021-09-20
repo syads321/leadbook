@@ -10942,3 +10942,6 @@ a.text-dark:focus {
   }
 }
 
+.row {
+  width: 100%;
+}
